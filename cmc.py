@@ -14,12 +14,9 @@ def cmc_stats(symbol, cmc_key) -> None:
     if 'data' in response.json():
         message = f"Found {len(response.json()['data'][symbol])} projects that matches the symbol ({symbol})."
         for data in response.json()['data'][symbol][:5]:
-            try:
-                chain = data['platform']['symbol']
-                token_address = data['platform']['token_address']
-                message += f"\n------------------------------\nChain: {chain}\nAddress: {token_address}"
-            except:
-                pass
+            chain = data['platform']['symbol'] if (('platform' in data) and (data['platform'] != None) and ('symbol' in data['platform'])) else None
+            token_address = data['platform']['token_address'] if (('platform' in data) and (data['platform'] != None) and ('token_address' in data['platform'])) else None
+            message += f"\n------------------------------\nChain: {chain}\nAddress: {token_address}"
     return message
 
 if __name__ == "__main__":
