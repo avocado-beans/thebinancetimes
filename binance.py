@@ -1,4 +1,5 @@
 from telethon import TelegramClient, events
+from datetime import datetime
 from fastapi import FastAPI
 import threading
 import uvicorn
@@ -22,19 +23,17 @@ def mask():
     uvicorn.run(app)
 
 async def IncomingMessageListener(event):
-    start = time.time()
-    message = event.message.message
+    message = event.message.message + f"\n\nTime: {datetime.now()}"
     print(message)
     await client.send_message(entity=record,message=message)
     if 'Binance' in message:
         try:
             symbol = message.split('(')[1].split(')')[0]
-            message = cmc.cmc_stats(symbol, cmc_key)
-            print(message)
-            await client.send_message(entity=record,message=message)
-            (f"Got token info in ~{time.time()-start} seconds")
+            message = cmc.cmc_stats(symbol, cmc_key) + f"\n\nTime: {datetime.now()}"
         except:
-            pass
+            message = "Not a listing announcement/not a new token."
+        print(message)
+        await client.send_message(entity=record,message=message)
 async def con():
     await client.connect()
     print("Connected")
