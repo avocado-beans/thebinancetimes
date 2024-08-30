@@ -1,7 +1,5 @@
 import requests
 
-cmc_key = 'dd608883-1a40-4292-8c05-b12e2541ae44'
-
 def cmc_stats(symbol, cmc_key) -> None:
     response = requests.get(
     url='https://pro-api.coinmarketcap.com/v2/cryptocurrency/info',
